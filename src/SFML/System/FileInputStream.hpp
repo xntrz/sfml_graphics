@@ -34,16 +34,6 @@
 #include <cstdio>
 #include <string>
 
-#ifdef SFML_SYSTEM_ANDROID
-namespace sf
-{
-namespace priv
-{
-class SFML_SYSTEM_API ResourceStream;
-}
-}
-#endif
-
 
 namespace sf
 {
@@ -121,11 +111,7 @@ private:
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-#ifdef SFML_SYSTEM_ANDROID
-    priv::ResourceStream* m_file;
-#else
     std::FILE* m_file; ///< stdio file stream
-#endif
 };
 
 } // namespace sf
