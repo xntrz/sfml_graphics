@@ -87,23 +87,6 @@ public:
     void create(unsigned int width, unsigned int height, const Uint8* pixels);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Load the image from a file on disk
-    ///
-    /// The supported image formats are bmp, png, tga, jpg, gif,
-    /// psd, hdr and pic. Some format options are not supported,
-    /// like progressive jpeg.
-    /// If this function fails, the image is left unchanged.
-    ///
-    /// \param filename Path of the image file to load
-    ///
-    /// \return True if loading was successful
-    ///
-    /// \see loadFromMemory, loadFromStream, saveToFile
-    ///
-    ////////////////////////////////////////////////////////////
-    bool loadFromFile(const std::string& filename);
-
-    ////////////////////////////////////////////////////////////
     /// \brief Load the image from a file in memory
     ///
     /// The supported image formats are bmp, png, tga, jpg, gif,

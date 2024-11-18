@@ -58,18 +58,6 @@ public:
     static ImageLoader& getInstance();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Load an image from a file on disk
-    ///
-    /// \param filename Path of image file to load
-    /// \param pixels   Array of pixels to fill with loaded image
-    /// \param size     Size of loaded image, in pixels
-    ///
-    /// \return True if loading was successful
-    ///
-    ////////////////////////////////////////////////////////////
-    bool loadImageFromFile(const std::string& filename, std::vector<Uint8>& pixels, Vector2u& size);
-
-    ////////////////////////////////////////////////////////////
     /// \brief Load an image from a file in memory
     ///
     /// \param data     Pointer to the file data in memory

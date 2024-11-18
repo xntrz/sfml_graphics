@@ -28,7 +28,9 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <SFML/System/Export.hpp>
 #include <SFML/System/Utf.hpp>
+
 #include <iterator>
 #include <locale>
 #include <string>
@@ -41,7 +43,7 @@ namespace sf
 ///        conversions between types and encodings
 ///
 ////////////////////////////////////////////////////////////
-class String
+class SFML_SYSTEM_API String
 {
 public:
 

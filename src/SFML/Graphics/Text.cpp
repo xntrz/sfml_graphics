@@ -567,12 +567,18 @@ void Text::ensureGeometryUpdate() const
     const sf::Texture& texture = m_font->getTexture(m_characterSize);
     float nx = (1.0f / texture.getSize().x);
     float ny = (1.0f / texture.getSize().y);
+
     for (std::size_t i = 0; i < m_vertices.getVertexCount(); ++i)
     {
         m_vertices[i].texCoords.x *= nx;
         m_vertices[i].texCoords.y *= ny;
     };
 
+    for (std::size_t i = 0; i < m_outlineVertices.getVertexCount(); ++i)
+    {
+        m_outlineVertices[i].texCoords.x *= nx;
+        m_outlineVertices[i].texCoords.y *= ny;
+    };
 }
 
 } // namespace sf

@@ -1,0 +1,1 @@
+emcc main.cpp rawfile.cpp -o main.html -s ASYNCIFY=1 -s WASM=0 -pthread -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=8 --shell-file shell.html -s USE_SDL=2 -s USE_SDL_MIXER=2 -s ALLOW_MEMORY_GROWTH=1 -s FETCH -I../include -L. -L../vendor/lib/emscripten -lSFML_GRAPHICS -lfreetype -Wno-deprecated -Wno-extern-initializer

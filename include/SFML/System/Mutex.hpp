@@ -28,13 +28,15 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <SFML/System/Export.hpp>
 #include <SFML/System/NonCopyable.hpp>
+
 #include <mutex>
 
 
 namespace sf
 {
-class Mutex : NonCopyable
+class SFML_SYSTEM_API Mutex : NonCopyable
 {
 public:
     inline Mutex(){};

@@ -12,6 +12,13 @@
 #include "SFML/Graphics.hpp"
 
 
+extern const unsigned char g_ImgData [];
+extern int g_ImgDataLen;
+
+extern const unsigned char g_FontData [];
+extern int g_FontDataLen;
+
+
 //
 //  "stolen" from raylib xD (https://github.com/raysan5/raylib/blob/master/src/rtextures.c#L947)
 //
@@ -108,12 +115,36 @@ int main(int argc, char** argv)
     camera2d.setCenter({ 800.0f * 0.5f, 600.0f * 0.5f });
     rw.setView(camera2d);
 
+    //
+    // font draw
+    // 
+    sf::Font font;
+    bool ret = font.loadFromMemory(g_FontData, g_FontDataLen);
+    assert(ret == true);
+
+    sf::Text text;
+    text.setFont(font);
+    text.setFillColor(sf::Color::Red);
+    text.setOutlineColor(sf::Color::Green);
+    text.setOutlineThickness(2.5f);
+    text.setString("SFML GRAPHICS EMSCRIPTEN\nNew line test! Hello world\nNew line with \ttab test");
+    text.setPosition({
+        (800.0f * 0.5f) - ((text.getLocalBounds().width - text.getLocalBounds().left) * 0.5f),
+        (600.0f * 0.5f) - ((text.getLocalBounds().height - text.getLocalBounds().top) * 0.5f)
+    });
+
+    //
+    // rect draw
+    // 
     sf::RectangleShape rc;
     rc.setSize({ 32.0f, 32.0f });
     rc.setOrigin({ 32.0f * 0.5f, 32.0f * 0.5f });
     rc.setPosition({ 800.0f * 0.5f, 600.0f * 0.5f });
     rc.setFillColor(sf::Color::Red);
-    
+
+    //
+    // circle draw
+    // 
     sf::CircleShape cs;
     cs.setRadius(52.0f);
     cs.setOrigin({ 52.0f * 0.5f, 52.0f * 0.5f });
@@ -122,6 +153,22 @@ int main(int argc, char** argv)
     cs.setOutlineThickness(2.0f);
     cs.setOutlineColor(sf::Color::White);
 
+    //
+    //  convex shape draw
+    //
+    sf::ConvexShape convex;
+    convex.setPointCount(5);
+    convex.setFillColor(sf::Color::Magenta);
+    convex.setPoint(0, sf::Vector2f(0.0f, 0.0f));
+    convex.setPoint(1, sf::Vector2f(150.0f, 10.0f));
+    convex.setPoint(2, sf::Vector2f(120.0f, 90.0f));
+    convex.setPoint(3, sf::Vector2f(30.0f, 100.0f));
+    convex.setPoint(4, sf::Vector2f(0.0f, 50.0f));
+    convex.setPosition(sf::Vector2f(800.0f * 0.75f, 600.0f * 0.75f));
+
+    //
+    //  draw into texture
+    //
     sf::RenderTexture rt;
     rt.create(800, 600); // WARNING: antialiasing not tested yet
     rt.setView(camera2d);    
@@ -145,6 +192,7 @@ int main(int argc, char** argv)
                     case SDL_WINDOWEVENT_RESIZED:
                     case SDL_WINDOWEVENT_SIZE_CHANGED:
                         rw.onResize(event.window.data1, event.window.data2);
+                        printf("EVENT RESIZE TO %d x %d\n", event.window.data1, event.window.data2);
                         break;
 
                     default:
@@ -174,6 +222,9 @@ int main(int argc, char** argv)
         rtRc.setPosition({ 0.0f, 256.0f });
 
         rw.draw(rtRc);
+
+        rw.draw(text);
+        rw.draw(convex);
 
         SDL_GL_SwapWindow(window);
     };

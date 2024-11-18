@@ -22,41 +22,31 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_MEMORYINPUTSTREAM_HPP
-#define SFML_MEMORYINPUTSTREAM_HPP
+#ifndef SFML_INPUTSTREAM_HPP
+#define SFML_INPUTSTREAM_HPP
 
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Config.hpp>
-#include <SFML/System/InputStream.hpp>
-#include <cstdlib>
+#include <SFML/System/Export.hpp>
 
 
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-/// \brief Implementation of input stream based on a memory chunk
+/// \brief Abstract class for custom file input streams
 ///
 ////////////////////////////////////////////////////////////
-class MemoryInputStream : public InputStream
+class SFML_SYSTEM_API InputStream
 {
 public:
 
     ////////////////////////////////////////////////////////////
-    /// \brief Default constructor
+    /// \brief Virtual destructor
     ///
     ////////////////////////////////////////////////////////////
-    MemoryInputStream();
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Open the stream from its data
-    ///
-    /// \param data        Pointer to the data in memory
-    /// \param sizeInBytes Size of the data, in bytes
-    ///
-    ////////////////////////////////////////////////////////////
-    void open(const void* data, std::size_t sizeInBytes);
+    virtual ~InputStream() {}
 
     ////////////////////////////////////////////////////////////
     /// \brief Read data from the stream
@@ -70,7 +60,7 @@ public:
     /// \return The number of bytes actually read, or -1 on error
     ///
     ////////////////////////////////////////////////////////////
-    virtual Int64 read(void* data, Int64 size);
+    virtual Int64 read(void* data, Int64 size) = 0;
 
     ////////////////////////////////////////////////////////////
     /// \brief Change the current reading position
@@ -80,7 +70,7 @@ public:
     /// \return The position actually sought to, or -1 on error
     ///
     ////////////////////////////////////////////////////////////
-    virtual Int64 seek(Int64 position);
+    virtual Int64 seek(Int64 position) = 0;
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the current reading position in the stream
@@ -88,7 +78,7 @@ public:
     /// \return The current position, or -1 on error.
     ///
     ////////////////////////////////////////////////////////////
-    virtual Int64 tell();
+    virtual Int64 tell() = 0;
 
     ////////////////////////////////////////////////////////////
     /// \brief Return the size of the stream
@@ -96,52 +86,67 @@ public:
     /// \return The total number of bytes available in the stream, or -1 on error
     ///
     ////////////////////////////////////////////////////////////
-    virtual Int64 getSize();
-
-private:
-
-    ////////////////////////////////////////////////////////////
-    // Member data
-    ////////////////////////////////////////////////////////////
-    const char* m_data;   ///< Pointer to the data in memory
-    Int64       m_size;   ///< Total size of the data
-    Int64       m_offset; ///< Current reading position
+    virtual Int64 getSize() = 0;
 };
 
 } // namespace sf
 
 
-#endif // SFML_MEMORYINPUTSTREAM_HPP
+#endif // SFML_INPUTSTREAM_HPP
 
 
 ////////////////////////////////////////////////////////////
-/// \class sf::MemoryInputStream
+/// \class sf::InputStream
 /// \ingroup system
 ///
-/// This class is a specialization of InputStream that
-/// reads from data in memory.
+/// This class allows users to define their own file input sources
+/// from which SFML can load resources.
 ///
-/// It wraps a memory chunk in the common InputStream interface
-/// and therefore allows to use generic classes or functions
-/// that accept such a stream, with content already loaded in memory.
-///
-/// In addition to the virtual functions inherited from
-/// InputStream, MemoryInputStream adds a function to
-/// specify the pointer and size of the data in memory.
-///
-/// SFML resource classes can usually be loaded directly from
-/// memory, so this class shouldn't be useful to you unless
-/// you create your own algorithms that operate on an InputStream.
+/// SFML resource classes like sf::Texture and
+/// sf::SoundBuffer provide loadFromFile and loadFromMemory functions,
+/// which read data from conventional sources. However, if you
+/// have data coming from a different source (over a network,
+/// embedded, encrypted, compressed, etc) you can derive your
+/// own class from sf::InputStream and load SFML resources with
+/// their loadFromStream function.
 ///
 /// Usage example:
 /// \code
-/// void process(InputStream& stream);
+/// // custom stream class that reads from inside a zip file
+/// class ZipStream : public sf::InputStream
+/// {
+/// public:
 ///
-/// MemoryInputStream stream;
-/// stream.open(thePtr, theSize);
-/// process(stream);
+///     ZipStream(std::string archive);
+///
+///     bool open(std::string filename);
+///
+///     Int64 read(void* data, Int64 size);
+///
+///     Int64 seek(Int64 position);
+///
+///     Int64 tell();
+///
+///     Int64 getSize();
+///
+/// private:
+///
+///     ...
+/// };
+///
+/// // now you can load textures...
+/// sf::Texture texture;
+/// ZipStream stream("resources.zip");
+/// stream.open("images/img.png");
+/// texture.loadFromStream(stream);
+///
+/// // musics...
+/// sf::Music music;
+/// ZipStream stream("resources.zip");
+/// stream.open("musics/msc.ogg");
+/// music.openFromStream(stream);
+///
+/// // etc.
 /// \endcode
-///
-/// InputStream, FileInputStream
 ///
 ////////////////////////////////////////////////////////////

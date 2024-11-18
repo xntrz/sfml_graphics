@@ -95,37 +95,6 @@ public:
     bool create(unsigned int width, unsigned int height);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Load the texture from a file on disk
-    ///
-    /// This function is a shortcut for the following code:
-    /// \code
-    /// sf::Image image;
-    /// image.loadFromFile(filename);
-    /// texture.loadFromImage(image, area);
-    /// \endcode
-    ///
-    /// The \a area argument can be used to load only a sub-rectangle
-    /// of the whole image. If you want the entire image then leave
-    /// the default value (which is an empty IntRect).
-    /// If the \a area rectangle crosses the bounds of the image, it
-    /// is adjusted to fit the image size.
-    ///
-    /// The maximum size for a texture depends on the graphics
-    /// driver and can be retrieved with the getMaximumSize function.
-    ///
-    /// If this function fails, the texture is left unchanged.
-    ///
-    /// \param filename Path of the image file to load
-    /// \param area     Area of the image to load
-    ///
-    /// \return True if loading was successful
-    ///
-    /// \see loadFromMemory, loadFromStream, loadFromImage
-    ///
-    ////////////////////////////////////////////////////////////
-    bool loadFromFile(const std::string& filename, const IntRect& area = IntRect());
-
-    ////////////////////////////////////////////////////////////
     /// \brief Load the texture from a file in memory
     ///
     /// This function is a shortcut for the following code:

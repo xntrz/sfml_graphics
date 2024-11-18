@@ -115,13 +115,6 @@ void Image::create(unsigned int width, unsigned int height, const Uint8* pixels)
 
 
 ////////////////////////////////////////////////////////////
-bool Image::loadFromFile(const std::string& filename)
-{
-    return false;
-}
-
-
-////////////////////////////////////////////////////////////
 bool Image::loadFromMemory(const void* data, std::size_t size)
 {
     return priv::ImageLoader::getInstance().loadImageFromMemory(data, size, m_pixels, m_size);

@@ -28,6 +28,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <SFML/System/Export.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
 
@@ -35,7 +36,7 @@ namespace sf
 {
 class Mutex;
 
-class Lock : NonCopyable
+class SFML_SYSTEM_API Lock : NonCopyable
 {
 public:
     explicit Lock(Mutex& mutex);

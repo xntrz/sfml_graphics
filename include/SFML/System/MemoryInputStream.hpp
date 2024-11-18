@@ -22,49 +22,42 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_FILEINPUTSTREAM_HPP
-#define SFML_FILEINPUTSTREAM_HPP
+#ifndef SFML_MEMORYINPUTSTREAM_HPP
+#define SFML_MEMORYINPUTSTREAM_HPP
 
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Config.hpp>
 #include <SFML/System/InputStream.hpp>
-#include <SFML/System/NonCopyable.hpp>
-#include <cstdio>
-#include <string>
+#include <SFML/System/Export.hpp>
+#include <cstdlib>
 
 
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-/// \brief Implementation of input stream based on a file
+/// \brief Implementation of input stream based on a memory chunk
 ///
 ////////////////////////////////////////////////////////////
-class FileInputStream : public InputStream, NonCopyable
+class SFML_SYSTEM_API MemoryInputStream : public InputStream
 {
 public:
+
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
     ///
     ////////////////////////////////////////////////////////////
-    FileInputStream();
+    MemoryInputStream();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Default destructor
+    /// \brief Open the stream from its data
+    ///
+    /// \param data        Pointer to the data in memory
+    /// \param sizeInBytes Size of the data, in bytes
     ///
     ////////////////////////////////////////////////////////////
-    virtual ~FileInputStream();
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Open the stream from a file path
-    ///
-    /// \param filename Name of the file to open
-    ///
-    /// \return True on success, false on error
-    ///
-    ////////////////////////////////////////////////////////////
-    bool open(const std::string& filename);
+    void open(const void* data, std::size_t sizeInBytes);
 
     ////////////////////////////////////////////////////////////
     /// \brief Read data from the stream
@@ -111,44 +104,45 @@ private:
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    std::FILE* m_file; ///< stdio file stream
+    const char* m_data;   ///< Pointer to the data in memory
+    Int64       m_size;   ///< Total size of the data
+    Int64       m_offset; ///< Current reading position
 };
 
 } // namespace sf
 
 
-#endif // SFML_FILEINPUTSTREAM_HPP
+#endif // SFML_MEMORYINPUTSTREAM_HPP
 
 
 ////////////////////////////////////////////////////////////
-/// \class sf::FileInputStream
+/// \class sf::MemoryInputStream
 /// \ingroup system
 ///
 /// This class is a specialization of InputStream that
-/// reads from a file on disk.
+/// reads from data in memory.
 ///
-/// It wraps a file in the common InputStream interface
+/// It wraps a memory chunk in the common InputStream interface
 /// and therefore allows to use generic classes or functions
-/// that accept such a stream, with a file on disk as the data
-/// source.
+/// that accept such a stream, with content already loaded in memory.
 ///
 /// In addition to the virtual functions inherited from
-/// InputStream, FileInputStream adds a function to
-/// specify the file to open.
+/// InputStream, MemoryInputStream adds a function to
+/// specify the pointer and size of the data in memory.
 ///
 /// SFML resource classes can usually be loaded directly from
-/// a filename, so this class shouldn't be useful to you unless
+/// memory, so this class shouldn't be useful to you unless
 /// you create your own algorithms that operate on an InputStream.
 ///
 /// Usage example:
 /// \code
 /// void process(InputStream& stream);
 ///
-/// FileInputStream stream;
-/// if (stream.open("some_file.dat"))
-///    process(stream);
+/// MemoryInputStream stream;
+/// stream.open(thePtr, theSize);
+/// process(stream);
 /// \endcode
 ///
-/// InputStream, MemoryInputStream
+/// InputStream, FileInputStream
 ///
 ////////////////////////////////////////////////////////////
