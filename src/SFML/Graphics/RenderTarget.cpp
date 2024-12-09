@@ -178,14 +178,14 @@ namespace
     {
         const char* vertexShaderSource =
             "#version 100                                           \n"
-            "precision lowp float;                                  \n"
+            "precision mediump float;                               \n"
             "uniform mat4 aViewProj;	                            \n"
             "uniform bool bTexFlip;                                 \n"
-            "attribute mediump vec2 aPos;                           \n"
-            "attribute lowp vec4 aColor;			                \n"
-            "attribute lowp vec2 aTexCoord;		                    \n"
-            "varying lowp vec4 oColor;			                    \n"
-            "varying lowp vec2 oTexCoord;		                    \n"
+            "attribute vec2 aPos;                                   \n"
+            "attribute vec4 aColor;			                        \n"
+            "attribute vec2 aTexCoord;		                        \n"
+            "varying vec4 oColor;			                        \n"
+            "varying vec2 oTexCoord;		                        \n"
             "void main()                                            \n"
             "{                                                      \n"
             "   oColor = aColor;                                    \n"
@@ -198,11 +198,11 @@ namespace
 
 		const char* fragmentShaderSource =
 			"#version 100                                                   \n"
-			"precision lowp float;                                          \n"
+			"precision mediump float;                                       \n"
             "uniform sampler2D Texture0;                                    \n"
             "uniform bool bUseTexture;                                      \n"
-            "varying lowp vec4 oColor;                                      \n"
-			"varying lowp vec2 oTexCoord;                                   \n"
+            "varying vec4 oColor;                                           \n"
+			"varying vec2 oTexCoord;                                        \n"
 			"void main()                                                    \n"
             "{                                                              \n"
             "   if (bUseTexture)                                            \n"
@@ -296,6 +296,11 @@ namespace
 
         GLint id = 0;
 
+        // check for current shader        
+        glCheck(glGetIntegerv(GL_CURRENT_PROGRAM, &id));
+        if (static_cast<unsigned int>(id) != m_shaderId)
+            glCheck(glUseProgram(m_shaderId));
+
 		if (texture)
 		{
 			// update tex cache
@@ -348,12 +353,7 @@ namespace
 			m_cacheTextureId = 0;
 		};
 
-		glUniformMatrix4fv(m_locViewProj, 1, GL_FALSE, (m_matProj *m_matModelView).getMatrix());
-
-        // check for current shader        
-        glCheck(glGetIntegerv(GL_CURRENT_PROGRAM, &id));
-        if (static_cast<unsigned int>(id) != m_shaderId)
-			glCheck(glUseProgram(m_shaderId));					
+		glUniformMatrix4fv(m_locViewProj, 1, GL_FALSE, (m_matProj *m_matModelView).getMatrix());			
 	};
 
 

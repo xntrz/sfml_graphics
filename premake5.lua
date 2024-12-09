@@ -25,7 +25,8 @@ workspace "SFML_GRAPHICS"
       inlining "Disabled"
       staticruntime "On"
       runtime "Debug"
-      editandcontinue "On"
+      editandcontinue "Off"
+      flags { "NoIncrementalLink" }
    filter "configurations:Release"
       defines { "NDEBUG" }
       symbols "Off"
@@ -41,11 +42,11 @@ workspace "SFML_GRAPHICS"
 project "SFML_GRAPHICS"
    kind "StaticLib"
    includedirs {    
-   "%{dir_inc}",
-   "%{dir_lib}/stb/include",
-   "%{dir_lib}/freetype/include", 
-   "%{dir_lib}/SFML/include", 
-}
+      "%{dir_inc}",
+      "%{dir_lib}/stb/include",
+      "%{dir_lib}/freetype/include", 
+      "%{dir_lib}/SFML/include", 
+   }
    files { 
       "%{dir_src}/**.h",
       "%{dir_src}/**.c",
